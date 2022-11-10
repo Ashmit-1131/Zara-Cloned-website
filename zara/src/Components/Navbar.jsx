@@ -2,7 +2,7 @@ import { Box, Flex, Image, Input, Spacer, Text } from '@chakra-ui/react';
 import React, { useContext } from 'react'
 import { NavLink } from "react-router-dom";
 import { AppContext } from '../Context/ContextApp';
-
+import DrawerExample from './Drawer';
 
 
 
@@ -15,7 +15,7 @@ const Navbar = () => {
 <>
 
 
-    {/* <DrawerExample l="20px"  /> */}
+    <DrawerExample l="20px"  />
 <Flex alignItems='center' gap={"2em"}  pt={"1em"} pr={"2em"}>
   
     <NavLink  to="/" ><Image ml="-1.85em" mt="-4px" maxHeight="101px" src='https://upload.wikimedia.org/wikipedia/commons/f/fd/Zara_Logo.svg' alt='Zara Logo' /></NavLink>
