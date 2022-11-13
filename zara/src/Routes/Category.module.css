@@ -1,0 +1,6 @@
+
+.category{
+
+    display: flex;
+    columns: 3;
+}
