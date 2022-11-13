@@ -11,15 +11,15 @@ I have made this website in 5 days in construct week in masai school. this is a 
 ### Some Glimpse and Screenshots of my website:-
 here are some screenShots of my website:
 ## Home Page
-<img width=100% src="https://drive.google.com/file/d/14lbYdIE4fZBJQjLiHODmOU7PROpTZtKW/view?usp=share_link" alt="image" />
+<img width=100% src="https://o.remove.bg/uploads/984948e2-bdf6-4106-900e-190950cbf991/Screenshot__1203_.png" alt="image" />
 
 ### Login Page
 
-<img width=100% src="https://drive.google.com/file/d/143gosng_2SmGA9Slyve6mXxkc6eMREGa/view?usp=share_link" alt="image" />
+<img width=100% src="https://o.remove.bg/uploads/47729b2c-8461-4937-b2d9-a7eace576544/Screenshot__1206_.png" alt="image" />
 
 ### Register page
 
-<img width=100% src="https://drive.google.com/file/d/1L-w6o_qVGMphKBW74xD79MXSYCErYRrN/view?usp=share_link" alt="image" />
+<img width=100% src="https://o.remove.bg/uploads/46cb76f3-72d7-4d67-87fd-105af43112cd/Screenshot__1207_.png" alt="image" />
 
 ## Some Inbuilt react libraries I used in the making of this project
 I have used some librabries like :-
