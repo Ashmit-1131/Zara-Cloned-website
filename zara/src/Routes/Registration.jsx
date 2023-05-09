@@ -1,37 +1,65 @@
-import React, { useState } from "react";
-import { Button, Box, Flex, FormLabel, Checkbox } from "@chakra-ui/react";
+import React, {useEffect, useState } from "react";
+import {useToast, Button, Box, Flex, FormLabel, Checkbox } from "@chakra-ui/react";
 import {
   Text,
   Input,
   Spacer,
-  Divider,
-  FormControl,
-  FormHelperText,
+FormControl,
   Select,
   Stack,
 } from "@chakra-ui/react";
+import { useSelector,useDispatch } from "react-redux";
+import { authRegister } from '../Redux/auth.redux/authAction'
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+
 
 const Registration = () => {
-  const [formData, setForm] = useState({ name: "", email: "", password: "" });
-  const navigate = useNavigate();
+  const [data, setData] = useState({
+    email: "",
+    password: "",
+    name: "",
+    address: "",
+    city: "",
+    state: "",
+    pincode: "",
+    phone: "",
+})
+const handleInput = (e) => {
+    const { name, value, type, checked } = e.target
+    const newValue = type === "checkbox" ? checked : value
+    setData({ ...data, [name]: newValue })
+}
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
+const dispatch = useDispatch();
+const toast = useToast();
+const navigate = useNavigate();
 
-    setForm({ ...formData, [name]: value });
-  };
+const { userRegister: { loading, error, message }, data: { isAuthenticated, token, user } } = useSelector(state => state.auth);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    axios.post(`https://amit-fake-stoore-test.herokuapp.com/signup`, formData).then((res) => {
-      console.log(res.data);
-      alert("SignUp Successfull");
-      setForm({ name: "", email: "", password: "" });
-      navigate("/login");
-    });
-  };
+useEffect(() => {
+    if (isAuthenticated) {
+        toast({
+            title: `Welcome${user.name} `,
+            description: "Account Created Successfully",
+            status: "success",
+            duration: 2000,
+            isClosable: true,
+        });
+        let time = setTimeout(() => {
+           navigate('/')
+        }, 3000);
+        return () => clearTimeout(time);
+    }
+    if (error) {
+        toast({
+            title: message,
+            description: 'Please try again',
+            status: "error",
+            duration: 2000,
+            isClosable: true,
+        });
+    }
+}, [isAuthenticated, error]);
 
   return (
     <>
@@ -44,14 +72,14 @@ const Registration = () => {
 
         <Flex mt="1.5em">
           <Box width={"400px"}>
-            {/* Form1 */}
+           
             <FormControl>
               <Input
                 fontSize="xs"
                 required="required"
                 name="email"
-                value={formData.email}
-                onChange={handleChange}
+                value={data.email}
+                 onChange={handleInput}
                 type="email"
                 placeholder="E-MAIL"
               />
@@ -61,8 +89,8 @@ const Registration = () => {
                 fontSize="xs"
                 required="required"
                 name="password"
-                value={formData.password}
-                onChange={handleChange}
+                value={data.password}
+                 onChange={handleInput}
                 type="password"
                 placeholder="PASSWORD"
               />
@@ -70,21 +98,17 @@ const Registration = () => {
               <Input
                 required="required"
                 name="name"
-                value={formData.name}
-                onChange={handleChange}
+                value={data.name} 
+                onChange={handleInput}
                 fontSize="xs"
                 type="text"
                 placeholder="NAME"
               />
               <Spacer></Spacer>
               <br />
-              <Input fontSize="xs" type="text" placeholder="ADDRESS" />
-              <Spacer></Spacer>
-              <br />
-              <Input fontSize="xs" type="text" placeholder="LOCALITY" />
-              <Spacer></Spacer>
-              <br />
-              <Select fontSize="xs" placeholder="Select option">
+            
+             
+              <Select fontSize="xs" placeholder="Select State" value={data.state} onChange={handleInput} name='state'>
                 <option value="AN">Andaman and Nicobar Islands</option>
                 <option value="AP">Andhra Pradesh</option>
                 <option value="AR">Arunachal Pradesh</option>
@@ -129,30 +153,28 @@ const Registration = () => {
                 <FormLabel as="none" alignContent={"center"} fontSize="xs">
                   +91
                 </FormLabel>
-                <Input fontSize="xs" type="number"></Input>
+                <Input fontSize="xs" type="number" 
+                name="phone"
+                value={data.phone}
+                 onChange={handleInput}></Input>
               </Flex>
             </FormControl>
           </Box>
           <Box ml="1em" pt="4em" width={"400px"}>
             {/* Form2 */}
             <FormControl>
-              <Input
-                fontSize="xs"
-                type="password"
-                placeholder="REPEAT PASSWORD"
-              />
+            <Input fontSize="xs" type="text" placeholder="ADDRESS" name="address" value={data.address}  onChange={handleInput} />
               <Spacer></Spacer>
               <br />
-              <Input fontSize="xs" type="text" placeholder="PINCODE" />
+            
+              <Input fontSize="xs" type="text" placeholder="PINCODE" name="pincode" value={data.pincode} onChange={handleInput}/>
               <Spacer></Spacer>
               <br />
-              <Input fontSize="xs" type="text" placeholder="MORE INFO" />
+             
+              <Input fontSize="xs" type="text" placeholder="CITY" name="city" value={data.city} onChange={handleInput} />
               <Spacer></Spacer>
               <br />
-              <Input fontSize="xs" type="text" placeholder="CITY" />
-              <Spacer></Spacer>
-              <br />
-              <Input fontSize="xs" type="text" value="India" />
+             
             </FormControl>
           </Box>
         </Flex>
@@ -169,15 +191,15 @@ const Registration = () => {
 
         <Box ml="-42.5em" mt="4em">
           <Button
-            disabled={formData.email === "" || formData.password === ""}
+         
             borderRadius="none"
             type="submit"
-            onClick={handleSubmit}
-            fontSize="xs"
+           fontSize="xs"
             color={"white"}
             bg={"black"}
             width={"400px"}
             ml="-10.8em"
+            onClick={() => dispatch(authRegister(data))}
           >
             CREATE ACCOUNT
           </Button>

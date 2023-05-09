@@ -1,14 +1,24 @@
 import { Box, Flex, Image, Input, Spacer, Text } from '@chakra-ui/react';
-import React, { useContext } from 'react'
+import React, { useEffect,useState} from 'react'
 import { NavLink } from "react-router-dom";
-import { AppContext } from '../Context/ContextApp';
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { authLogout } from "../Redux/auth.redux/authAction";
 import DrawerExample from './Drawer';
 
 
 
-const Navbar = () => {
+const Navbar = (page) => {
+  const {
+    data: { isAuthenticated, user },
+  } = useSelector((state) => state.auth);
 
-  const {isAuth}=useContext(AppContext)
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    
+  }, [dispatch, isAuthenticated])
+
 
 
   return (
@@ -23,16 +33,19 @@ const Navbar = () => {
     <Flex width={"21%"} mt="-50px" justify={"space-between"}>
     <NavLink to="/search" ><Box align="left" width={"80px"} fontWeight="600" borderBottom="1px solid black"><Text fontSize="12px">SEARCH</Text></Box></NavLink>
     
-    {
-      isAuth.auth===true?
-      <>
-      <Text fontSize="12px" textTransform="uppercase">{isAuth.name}</Text>
-      </>:
-      <>
-       <NavLink to="/login" ><Text fontSize="12px">LOG IN</Text></NavLink>
-      </>
-    }
+
+   
+      
     
+    
+      <Box gap="6" display={{ base: "flex", md: "flex" }}>
+            <Link to={isAuthenticated ? null : "/login"}>
+              <Text fontSize="sm" onClick={isAuthenticated ? () => {dispatch(authLogout())} : null} >
+                {isAuthenticated ? user.name.toUpperCase() : "LOGIN"}
+              </Text>
+            </Link>
+           
+          </Box>
     
     
    

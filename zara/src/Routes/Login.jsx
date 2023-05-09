@@ -1,86 +1,57 @@
 import { Flex } from '@chakra-ui/react'
-import { Box, Text , Input, Button, Spacer, Divider} from "@chakra-ui/react"
+import {useToast, Box, Text , Input, Button, Spacer} from "@chakra-ui/react"
 import {
   FormControl,
-  FormLabel,
-  FormErrorMessage,
-  FormHelperText,
+ FormHelperText,
 } from '@chakra-ui/react'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from '@chakra-ui/react'
-import { AppContext } from '../Context/ContextApp'
-import { useNavigate } from 'react-router-dom'
-import axios from 'axios'
-import Footer from '../Components/Footer'
+import { authLogin } from '../Redux/auth.redux/authAction'
+import { useSelector,useDispatch } from 'react-redux'
+import {  useNavigate } from 'react-router-dom'
+
+
 
 const Login = () => {
+    const [loginData, setLoginData] = React.useState({ email: '', password: '' });
 
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setLoginData({ ...loginData, [name]: value });
+    }
 
+    const dispatch = useDispatch();
+    const toast = useToast();
+    const navigate = useNavigate();
 
+    const { userLogin: { loading, error, message }, data: { isAuthenticated, token, user } } = useSelector(state => state.auth);
 
-  const {setisAuth,handleLogin}=useContext(AppContext)
-
-
-  const [formData,setForm]=useState({email:"",password:""})
-  const navigate=useNavigate()
-  const [signUpData,setSignUpData]=useState([])
+    useEffect(() => {
+        if (isAuthenticated) {
+            toast({
+                title: `Welcome ${user.name}`,
+                description: "You are in logged in",
+                status: "success",
+                duration: 2000,
+                isClosable: true,
+            });
+            let time = setTimeout(() => {
+                navigate("/");
+            }, 3000);
+            return () => clearTimeout(time);
+        }
+        if (error) {
+            toast({
+                title: message,
+                description: 'Please try again',
+                status: "error",
+                duration: 2000,
+                isClosable: true,
+            });
+        }
+    }, [isAuthenticated, error]);
   
-  
-  
-  useEffect(()=>{
-      axios.get(`https://amit-fake-stoore-test.herokuapp.com/signup`).then((res)=>{
-          setSignUpData(res.data)
-       })
-  },[])
-  
-  const handleChange=(e)=>{
-      const {name,value}=e.target
-  
-      setForm({...formData,[name]:value})
-  
-  }
-  
-  const handleSubmit=(e)=>{
-      e.preventDefault()
-      let mark=false
-      let name=null
-      signUpData.map((el)=>{
-          if(el.email===formData.email && el.password===formData.password)
-          {
-              mark=true
-              name=el.name
-              return
-          }
-      })
-   
-      if(mark===true)
-      {
-          handleLogin(name)
-          alert("Login successfull")
-          navigate("/")
-      }
-      else{
-          alert("login failed")
-      }
-  }
-  
-  
-  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-  return (
+ return (
    <>
    <Flex mt="8em">
 
@@ -93,20 +64,22 @@ const Login = () => {
    <br/>
     <Input fontSize='xs'   required="required"
      name='email' 
-     value={formData.email}
-     onChange={handleChange} type='email' placeholder='E-MAIL' />
+     value={loginData.email}
+     onChange={handleChange} type='email' placeholder='E-MAIL'
+     id='a' />
     <Spacer/>
     <br/>
     <Input fontSize='xs' 
       required="required"
       name='password' 
-      value={formData.password}
-      onChange={handleChange} type='password' placeholder='PASSWORD' />
+      value={loginData.password}
+      onChange={handleChange} type='password' placeholder='PASSWORD'
+      id='b' />
     <Spacer/>
     <br/>
     <FormHelperText fontSize='8px' align="left" >HAVE YOU FORGOTTEN YOUR PASSWORD?</FormHelperText>
     <Spacer/>   <br/>
-    <Button fontSize='xs' borderRadius={"none"} ml="-1em"  onClick={handleSubmit}  color={"white"} bg={"black"} width={"300px"}>LOG IN</Button>
+    <Button fontSize='xs' borderRadius={"none"} ml="-1em"  color={"white"} bg={"black"} width={"300px"} onClick={() => dispatch(authLogin(loginData))}>LOG IN</Button>
 </FormControl>
 
     </Box>

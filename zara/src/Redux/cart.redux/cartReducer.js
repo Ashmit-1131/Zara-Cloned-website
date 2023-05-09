@@ -1,103 +1,161 @@
+import {
+    ADD_TO_CART_FAILURE,
+    ADD_TO_CART_REQUEST,
+    ADD_TO_CART_SUCCESS,
+    CLEAR_CART_FAILURE,
+    CLEAR_CART_REQUEST,
+    CLEAR_CART_SUCCESS,
+    GET_CART_FAILURE,
+    GET_CART_REQUEST,
+    GET_CART_SUCCESS,
+    REMOVE_FROM_CART_FAILURE,
+    REMOVE_FROM_CART_REQUEST,
+    REMOVE_FROM_CART_SUCCESS,
+    UPDATE_CART_FAILURE,
+    UPDATE_CART_REQUEST,
+    UPDATE_CART_SUCCESS,
+  } from "./cartTypes";
+  
+  const initialState = {
+    carts: [],
+    loading: false,
+    error: false,
+    message: "",
+    total:0
+  };
+  
+  export default function cartReducer(state = initialState, { type, payload }) {
+    switch (type) {
+      case GET_CART_REQUEST:
+        return {
+          ...state,
+          loading: true,
+          error: false,
+        };
+      case GET_CART_SUCCESS:
+        return {
+          ...state,
+          loading: false,
+          error: false,
+          carts: payload,
+          total:payload.reduce((ac,el)=>ac+(Number(el.quantity)*Number(el.productId.price)),0)
+        };
+      case GET_CART_FAILURE:
+        return {
+          ...state,
+          loading: false,
+          error: true,
+        };
+      case ADD_TO_CART_REQUEST:
+        return {
+          ...state,
+          loading: true,
+          error: false,
+        };
+      case ADD_TO_CART_SUCCESS:
+        const productExists = state.carts.find( cart => cart._id === payload.newCartItem._id);
+        if(productExists) {
+          let arr4= state.carts.map( cart => cart._id === payload._id ? payload : cart)
+          return {
+            ...state,
+            loading: false,
+            error: false,
+            carts:arr4,
+            total:arr4.reduce((ac,el)=>ac+(Number(el.quantity)*Number(el.productId.price)),0)
+          };
+        } else {
+          let arr3=[...state.carts, payload.newCartItem]
+          return {
+            ...state,
+            loading: false,
+            error: false,
+            carts:arr3, 
+            total:arr3.reduce((ac,el)=>ac+(Number(el.quantity)*Number(el.productId.price)),0)
 
-import {GET_CART_ERROR,GET_CART_LOADING,GET_CART_SUCESS,GET_CART_UPDATE,ADD_CART,DELETE_CART, GET_CART_NUM} from './cartTypes.js';
-
-
-let initialvalue = {
-    cart:[],
-    loading:false,
-    error:false,
-    total:0,
-    msg:''
-}
-
-export const CartReducer = (state=initialvalue,{type,payload}) => {
- 
-        switch(type){
-            case GET_CART_SUCESS :{
-              
-                return{
-                    ...state,
-                    error:false,
-                    loading:false,
-                    cart:payload.cart,
-                    total:payload.total
-                }
-            }
-            case GET_CART_ERROR :{
-                return {
-                    ...state,
-                    error:payload,
-                    cart:[],
-                    loading:false
-                }
-
-            }
-            case GET_CART_LOADING :{
-                return{
-                    ...state,
-                    error:'',
-                    loading:true,
-                    cart:[]
-                }
-            }
-            case ADD_CART :{
-                
-                return{
-                    ...state,
-                    error:false,
-                    loading:false,
-                    cart:[...state.cart,payload],
-                    msg:payload.msg
-                }
-            }
-            case DELETE_CART :{
-                let newcart = state.cart.filter((ele)=>ele._id !== payload)
-                let Total = 0;
-                for(let i=0; i<newcart.length; i++){
-                   Total+=(newcart[i].price*newcart[i].quantity)
-                }
-                return{
-                    ...state,
-                    error:false,
-                    loading:false,
-                    cart:newcart,
-                    total:Total
-                }
-            }
-            case GET_CART_NUM :{
-                return(
-                    state
-                )
-            }
-            case GET_CART_UPDATE :{
-                let newcart = state.cart.map((ele)=>{
-                    if(ele._id===payload._id){
-                        return{
-                            ...ele,
-                            quantity:payload.value
-                        }
-                    }else{
-                        return{
-                            ...ele
-                        }
-                    }
-                })
-                let Total = 0;
-                for(let i=0; i<newcart.length; i++){
-                   Total+=(newcart[i].price*newcart[i].quantity)
-                }
-
-                return {
-                    ...state,
-                    error:false,
-                    loading:false,
-                    cart:newcart,
-                    total:Total
-                }
-
-            }
-            default:{
-                return state;
-            }
+          };
         }
-}
+      case ADD_TO_CART_FAILURE:
+        return {
+          ...state,
+          loading: false,
+          error: true,
+        };
+  
+        case UPDATE_CART_REQUEST:
+          return {
+              ...state,
+              loading: true,
+              error: false,
+          };
+          case UPDATE_CART_SUCCESS:
+            let arr2=state.carts.map((cart) => {
+              if (cart._id === payload.updatedItem._id) {
+                  return payload.updatedItem;
+              }
+              return cart;
+          })
+              return {
+                  ...state,
+                  loading: false,
+                  error: false,
+                  carts: arr2,
+                  total:arr2.reduce((ac,el)=>ac+(Number(el.quantity)*Number(el.productId.price)),0)
+
+              };
+  
+              case UPDATE_CART_FAILURE:
+                  return {
+                      ...state,
+                      loading: false,
+                      error: true,
+                  };
+                  
+      case REMOVE_FROM_CART_REQUEST:
+        return {
+          ...state,
+          loading: true,
+          error: false,
+        };
+      case REMOVE_FROM_CART_SUCCESS:
+        let arr=state.carts.filter((cart) => cart._id !== payload.id)
+        return {
+          ...state,
+          loading: false,
+          error: false,
+          carts: arr,
+          total:arr.reduce((ac,el)=>ac+(Number(el.quantity)*Number(el.productId.price)),0)
+
+        };
+      case REMOVE_FROM_CART_FAILURE:
+        return {
+          ...state,
+          loading: false,
+          error: true,
+        };
+  
+      case CLEAR_CART_REQUEST:
+        return {
+          ...state,
+          loading: true,
+          error: false,
+        };
+      case CLEAR_CART_SUCCESS:
+        return {
+          ...state,
+          loading: false,
+          error: false,
+          carts: [],
+          total:0
+        };
+      case CLEAR_CART_FAILURE:
+        return {
+          ...state,
+          loading: false,
+          error: true,
+        };
+      default:
+        return state;
+    }
+  }
+  // ddsffds
+  
