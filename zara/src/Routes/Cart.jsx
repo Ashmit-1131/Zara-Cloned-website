@@ -7,7 +7,7 @@ import {VscBookmark} from "react-icons/vsc"
 
 const cartData=()=>{
 
-return axios("https://amit-fake-stoore-test.herokuapp.com/cart")
+return axios()
 
 }
 

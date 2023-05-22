@@ -1,4 +1,4 @@
-import { SimpleGrid , Box, Text, Image} from '@chakra-ui/react'
+import { SimpleGrid , Box, Text, Image,Link} from '@chakra-ui/react'
 import React from 'react'
 
 const Help = () => {
@@ -6,11 +6,14 @@ const Help = () => {
     <>
     <br/>
     <br></br>
-    <Text mt="2em" ml="3em" align={"left"}  ><b>HELP</b></Text>
-    <SimpleGrid marginTop="5em" columns={6} spacing={8}>
+    <Text mt="12em" ml="3em" align={"left"}  ><b>HELP</b></Text>
+    <SimpleGrid marginTop="10em" columns={6} spacing={8}>
   
     <Box margin={"auto"} width={"125px"}><Image margin={"auto"} width={"40px"} src='https://static.zara.net/photos///contents/mkt/misc/help/icons//icon-80-help-bag.svg?ts=1550654368093'></Image><Text fontSize='xs' as='b' >SHOP AT ZARA.COM</Text></Box>
+    <Link to="./order">
     <Box  margin={"auto"} width={"125px"}><Image  margin={"auto"} width={"40px"} src='https://static.zara.net/photos///contents/mkt/misc/help/icons//icon-80-help-shipping.svg?ts=1550654368093'></Image><Text fontSize='xs' as='b'>SHIPPING AND ORDER STATUS</Text></Box>
+    </Link>
+   
     <Box margin={"auto"} width={"125px"}><Image margin={"auto"} width={"40px"} src='https://static.zara.net/photos///contents/mkt/misc/help/icons//icon-80-help-returns.svg?ts=1550654368093'></Image><Text fontSize='xs' as='b'>EXCHANGES AND RETURNS</Text></Box>
     <Box margin={"auto"} width={"125px"}><Image margin={"auto"} width={"40px"} src='https://static.zara.net/photos///contents/mkt/misc/help/icons//icon-80-help-payment.svg?ts=1550654368093'></Image><Text fontSize='xs' as='b'>PAYMENT</Text></Box>
     <Box margin={"auto"} width={"125px"} ><Image margin={"auto"} width={"40px"} src='https://static.zara.net/photos///contents/mkt/misc/help/icons//icon-80-help-product.svg?ts=1550654368093'></Image><Text fontSize='xs' as='b'>PRODUCT</Text></Box>

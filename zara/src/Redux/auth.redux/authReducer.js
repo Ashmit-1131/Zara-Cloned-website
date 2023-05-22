@@ -1,102 +1,56 @@
 import {
-    AUTH_LOGIN_FAILURE,
-    AUTH_LOGIN_REQUEST,
-    AUTH_LOGIN_SUCCESS,
-    AUTH_LOGOUT,
-    AUTH_REGISTER_FAILURE,
-    AUTH_REGISTER_REQUEST,
-    AUTH_REGISTER_RESET,
-    AUTH_REGISTER_SUCCESS,
-  } from "./authTypes";
-  import Cookies from "js-cookie";
-  
-  const initialState = {
-    userLogin: { loading: false, error: false, message: "" },
-    userRegister: { loading: false, error: false, message: "" },
-    userLogout: { loading: false, error: false, message: "" },
-    data: {
-      isAuthenticated: Cookies.get("token") ? true : false,
-      token: Cookies.get("token") || null,
-      user: Cookies.get("user") ? JSON.parse(Cookies.get("user")) : null,
-    },
-  };
-  
-  export default function authReducer(state = initialState, { type, payload }) {
-    switch (type) {
-      case AUTH_LOGIN_REQUEST:
-        return { ...state, userLogin: { loading: true, error: false } };
-      case AUTH_LOGIN_SUCCESS:
-        Cookies.set("token", payload.token);
-        Cookies.set(
-          "user",
-          JSON.stringify({
-            name: payload.user.name,
-            email: payload.user.email,
-            _id: payload.user._id,
-          })
-        );
-        return {
-          ...state,
-          userLogin: { loading: false, error: false, message: payload.message },
-          data: {
-            isAuthenticated: true,
-            token: payload.token,
-            user: payload.user,
-          }
-        };
-      case AUTH_LOGIN_FAILURE:
-        return {
-          ...state,
-          userLogin: { loading: false, error: true, message: payload.message },
-        };
-      case AUTH_LOGOUT:
-        Cookies.remove("token");
-        Cookies.remove("user");
-        return {
-          ...state,
-          data: {
-            isAuthenticated: false,
-            token: null,
-            user: null,
-          },
-        };
-      case AUTH_REGISTER_REQUEST:
-        return {
-          ...state,
-          userRegister: { loading: true, error: false },
-        };
-      case AUTH_REGISTER_SUCCESS:
-        Cookies.set("token", payload.token);
-        Cookies.set(
-          "user",
-          JSON.stringify({
-            name: payload.user.name,
-            email: payload.user.email,
-            _id: payload.user._id,
-          })
-        );
-        return {
-          ...state,
-          userRegister: { loading: false, error: false, message: payload.message },
-          data: {
-            isAuthenticated: true,
-            token: payload.token,
-            user: payload.user,
-          }
-        };
-      case AUTH_REGISTER_FAILURE:
-        return {
-          ...state,
-          userRegister: { loading: false, error: true, message: payload.message },
-        };
-  
-      case AUTH_REGISTER_RESET:
-        return {
-          ...state,
-          userRegister: { loading: false, error: false, message: "" },
-        };
-  
-      default:
-        return state;
+  LOGOUT,
+  USER_LOGIN_FAILURE,
+  USER_LOGIN_REQUEST,
+  USER_LOGIN_SUCCESS,
+} from "./authTypes";
+
+// console.log(localStorage.getItem("token"));
+const initalState = {
+  isAuth: sessionStorage.getItem("isAuth") || false,
+  token: sessionStorage.getItem("token") || "",
+  name: sessionStorage.getItem("name") || "",
+  email: sessionStorage.getItem("email") || "",
+  address:sessionStorage.getItem("address") || "",
+  phone:sessionStorage.getItem("phone") || "",
+  city:sessionStorage.getItem("city") || "",
+  pincode:sessionStorage.getItem("pincode") || "",
+  state:sessionStorage.getItem("state") || "",
+  isLoading: false,
+  isError: false,
+};
+
+export const reducer = (state = initalState, { type, payload }) => {
+  switch (type) {
+    case USER_LOGIN_REQUEST:
+      return { ...state, isLoading: true };
+    case USER_LOGIN_SUCCESS:
+      // console.log(payload)
+      sessionStorage.setItem("token", payload.token);
+      sessionStorage.setItem("isAuth", true);
+      sessionStorage.setItem("email", payload.email);
+      sessionStorage.setItem("name", payload.name);
+      sessionStorage.setItem("address", payload.address);
+      sessionStorage.setItem("phone", payload.phone);
+      sessionStorage.setItem("city", payload.city);
+      sessionStorage.setItem("pincode", payload.pincode);
+      sessionStorage.setItem("state", payload.state);
+      return { ...state, isLoading: false, isAuth: true, token: payload.token,name:payload.name,email:payload.email,address:payload.address,phone:payload.phone,city:payload.city,pincode:payload.pincode,state:payload.state };
+    case USER_LOGIN_FAILURE:
+      return { ...state, isLoading: false, isError: true, isAuth: false };
+    case LOGOUT: {
+      return {
+        isAuth: false,
+        token: "",
+        name:"",
+        email:"",
+       
+        isLoading: false,
+        isError: false,
+    
+      };
     }
+    default:
+      return state;
   }
+};
