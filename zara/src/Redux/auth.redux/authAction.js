@@ -1,38 +1,41 @@
-import { AUTH_LOGIN_FAILURE, AUTH_LOGIN_REQUEST, AUTH_LOGIN_SUCCESS, AUTH_LOGOUT, AUTH_REGISTER_FAILURE, AUTH_REGISTER_REQUEST, AUTH_REGISTER_SUCCESS } from "./actionTypes";
 import axios from "axios";
+import { BASE_URL1 } from "../../constants/config";
+import { USER_LOGIN_FAILURE, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS,LOGOUT } from "./authTypes";
+const loginRequestAction = () => {
+  return { type: USER_LOGIN_REQUEST };
+};
+
+const loginSuccessAction = (payload) => {
+  // console.log(payload)
+  return { type: USER_LOGIN_SUCCESS, payload };
+};
+
+const loginFailureAction = () => {
+  return { type: USER_LOGIN_FAILURE };
+};
 
 
-export const authRegister = (data) => async (dispatch) => {
-    try {
-        dispatch({ type: AUTH_REGISTER_REQUEST });
-        const res = await axios.post("https://cultwear.onrender.com/user/register", data);
-        res.data.data = { ...res.data.data, message: res.data.message };
-        dispatch({
-            type: AUTH_REGISTER_SUCCESS,
-            payload: res.data.data,
-        });
-    } catch (error) {
-        dispatch({
-            type: AUTH_REGISTER_FAILURE,
-            payload: {
-                message: error.response.data.message,
-            },
-        });
+export const login = (userData) => async (dispatch) => {
+  dispatch(loginRequestAction())
+
+  try {
+    const res = await axios.post(`${BASE_URL1}/user/login`, userData);
+    // console.log(res);
+    if(res.data.status==1){
+      dispatch(loginSuccessAction({token:res.data.token,name:res.data.name,email:res.data.email,address:res.data.address,pincode:res.data.pincode,city:res.data.city,phone:res.data.phone,state:res.data.state}));
+      return { "status": res.data.status, "msg": res.data.message };
+    }else{
+      dispatch(loginFailureAction());
+      return { "status": res.data.status, "msg": res.data.message };
+
     }
-}
-
-
-export const authLogin = (data) => async (dispatch) => {
-    try {
-        dispatch({ type: AUTH_LOGIN_REQUEST });
-        const res = await axios.post("https://cultwear.onrender.com/user/login", data);
-        res.data.data = { ...res.data.data, message: res.data.message };
-        dispatch({ type: AUTH_LOGIN_SUCCESS, payload: res.data.data });
-    } catch (error) {
-        dispatch({ type: AUTH_LOGIN_FAILURE, payload: { message: error.response.data.message } });
-    }
-}
+  
+  } catch (err) {
+    console.log(err);
+    dispatch(loginFailureAction());
+  }
+} 
 
 export const authLogout = () => (dispatch) => {
-    dispatch({ type: AUTH_LOGOUT });
+  dispatch({ type: LOGOUT });
 }

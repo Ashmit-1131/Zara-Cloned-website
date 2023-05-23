@@ -9,7 +9,7 @@ import { Carousel } from 'react-responsive-carousel';
 import Women from './Women';
 import Men from './Men';
 import Kids from './Kids';
-import { Link } from '@chakra-ui/react';
+import { Link } from 'react-router-dom';
 const Carouselll = () => {
   return (
    <>
@@ -21,9 +21,9 @@ const Carouselll = () => {
        infiniteLoop={true}
     >
 
-                <div><Link textDecoration={"none"} href="/women"><Women/></Link></div>
-                <div><Men/></div>
-                <div><Kids /></div>
+                <div><Link to={"/products?itemGender=female"}><Women/></Link></div>
+                <div><Link to={"/products?itemGender=male"}><Men/></Link></div>
+                <div><Link to={"/products?itemGender=girls"}><Kids/></Link></div>
 
 
             </Carousel>
