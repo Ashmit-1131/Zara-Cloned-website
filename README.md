@@ -5,7 +5,7 @@ This is my Zara project
 This is my vercel link:-https://zara-beige.vercel.app/
 
 # Individual Project At Masai School “Zara Clone”.
-I enjoyed the process of learning new thing in this construct week .I have been working on it regularly throughout this week..I have splitted my work on the basis of issues and tasks i created..And I have learn how to deploy Api on herokuApp and then use it later anywhere..
+I enjoyed the process of learning new thing in this construct week .I have been working on it regularly throughout this week..I have splitted my work on the basis of issues and tasks i created..And I have learn how to store your data on mongodb and deploy it on cyclic,learn authentication,search functionality etc...
 
 ## Project Details
 
