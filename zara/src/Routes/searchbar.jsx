@@ -28,6 +28,7 @@ const Serachbar = () => {
   const [searchData, setSearchData] = useState([]);
   const [display, setDisplay] = useState(false);
   const [selectedText, setSelectedText] = useState("WOMAN");
+  const nav = useNavigate();
 
   const handleKeyDown = (event) => {
     if (event.keyCode === 13) {

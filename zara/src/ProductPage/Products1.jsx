@@ -110,7 +110,9 @@ import {
         let res = await axios.get(
           `${BASE_URL1}/cloths?itemGender=${catg}&itemCategory=${catg1}&page=${page}&${queryString}`
         );
-        //?gender=female ya kuch bhi filter krna ha too
+        //?gender=female ya kuch bhi filter krna ha too]
+        setisError(true);
+
         setproductlist(res.data.data);
         setfullData(res.data.data)
         setTotalPage(res.data.count);

@@ -103,25 +103,27 @@ if(!query){
 }
 
 
-  let getdata = async (page) => {
-    try {
-      setisloading(true);
-      let res = await axios.get(
-        `${BASE_URL1}/cloths?itemGender=${catg}&page=${page}&${queryString}`
-      );
-      //?gender=female ya kuch bhi filter krna ha too
-      setproductlist(res.data.data);
-      setfullData(res.data.data)
-      setTotalPage(res.data.count);
-      setisloading(false);
-    } catch (err) {
-      setisError(true);
-    }
-  };
+let getdata = async (page) => {
+  try {
+    setisloading(true);
+    setisError(false); // Reset error state
+    let res = await axios.get(
+      `${BASE_URL1}/cloths?itemGender=${catg}&page=${page}&${queryString}`
+    );
+    setproductlist(res.data.data);
+    setfullData(res.data.data);
+    setTotalPage(res.data.count);
+  } catch (err) {
+    setisError(true);
+  } finally {
+    setisloading(false);
+  }
+};
+
 
   useEffect(() => {
     getdata(page);
-  }, [page, filter,searchParam]);
+  }, [page, filter,query]);
 
   useEffect(() => {}, [griddata]);
 

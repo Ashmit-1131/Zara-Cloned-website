@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import Paginantion from "./Pagination";
 import  Loading  from "../Components/Loading/Loading";
-import { BASE_URL } from "../constants/config";
+import { BASE_URL1 } from "../constants/config";
 import { CONTAINER } from "../constants/constants";
 import { AUTO, FILL_90PARENT, R1, R2, R3, R4 } from "../constants/typography";
 
